@@ -1,0 +1,71 @@
+{
+    "name": "mnb/mnb-phpexcel",
+    "description": "Framework-neutral modular PHP spreadsheet toolkit for XLSX, CSV, JSON, XML, ODS, optional XLS, SQL, and low-memory streaming workflows.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "MNB",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=8.1",
+        "ext-json": "*"
+    },
+    "suggest": {
+        "ext-zip": "Required for XLSX read/write support.",
+        "ext-xmlreader": "Required for XLSX and XML read support.",
+        "ext-pdo": "Required for SQL import/export helpers.",
+        "ext-mbstring": "Recommended for better UTF-8/legacy encoding handling.",
+        "ext-iconv": "Recommended for CSV encoding conversion.",
+        "mnb/mnb-phpexcel-core": "Install the lightweight shared reader/session API when using split format packages.",
+        "mnb/mnb-phpexcel-xlsx": "Install only native XLSX support in modular deployments.",
+        "mnb/mnb-phpexcel-xml": "Install only XML support in modular deployments.",
+        "mnb/mnb-phpexcel-all": "Install the complete split-package family.",
+        "phpoffice/phpspreadsheet": "Required only by the optional legacy XLS adapter package."
+    },
+    "replace": {
+        "mnb/mnb-phpexcel-core": "self.version",
+        "mnb/mnb-phpexcel-csv": "self.version",
+        "mnb/mnb-phpexcel-json": "self.version",
+        "mnb/mnb-phpexcel-xml": "self.version",
+        "mnb/mnb-phpexcel-xlsx": "self.version",
+        "mnb/mnb-phpexcel-ods": "self.version",
+        "mnb/mnb-phpexcel-xls": "self.version",
+        "mnb/mnb-phpexcel-database": "self.version",
+        "mnb/mnb-phpexcel-application": "self.version",
+        "mnb/mnb-phpexcel-all": "self.version"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mnb\\PHPExcel\\": "src/"
+        }
+    },
+    "scripts": {
+        "test:syntax": "@php tools/syntax-check.php",
+        "test:smoke": "@php tools/run-smoke-tests.php",
+        "test": [
+            "@test:syntax",
+            "@test:smoke"
+        ],
+        "test:release": "@php tools/release-check.php",
+        "build:modules": "@php tools/build-modular-packages.php",
+        "test:modules": "@php tools/test-modular-packages.php"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "keywords": [
+        "php",
+        "excel",
+        "xlsx",
+        "csv",
+        "spreadsheet",
+        "streaming",
+        "import",
+        "export"
+    ],
+    "config": {
+        "sort-packages": true
+    }
+}

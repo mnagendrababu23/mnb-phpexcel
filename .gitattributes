@@ -1,0 +1,6 @@
+/tests export-ignore
+/examples/*.xlsx export-ignore
+/examples/*.csv export-ignore
+/.github export-ignore
+/.idea export-ignore
+/.vscode export-ignore

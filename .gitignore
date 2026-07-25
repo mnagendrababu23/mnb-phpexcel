@@ -1,0 +1,12 @@
+/vendor/
+/composer.lock
+/.phpunit.cache/
+/.env
+*.log
+*.tmp
+*.xlsx
+*.xls
+*.csv
+*.sqlite
+.DS_Store
+Thumbs.db

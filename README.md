@@ -9,7 +9,7 @@ PHP Array ⇄ XLSX ⇄ CSV ⇄ JSON ⇄ XML ⇄ SQL
 Current development release:
 
 ```text
-v1.4.0 — Typed Domain Import APIs
+v1.5.0 — Full Workflow Orchestration and Native Pivot/Formula APIs
 ```
 
 This package keeps the rich workbook reader/writer optimized for **small and normal files**. Large XLSX files are handled through separate **preflight/advisor + streaming import/export** layers so applications do not load huge workbooks into PHP arrays.
@@ -55,6 +55,27 @@ foreach (Xlsx::read('orders.xlsx', $options)->rows() as $row) {
 
 See `docs/MODULAR_PACKAGES.md` for package ownership and release instructions.
 
+## v1.5 full workflow APIs
+
+v1.5 adds a dependency-free formula evaluator for common business formulas, native from-scratch pivot-table generation, multi-file imports, a durable filesystem queue and worker, AJAX upload storage, an API dispatcher, MIME spreadsheet email attachments, and cron-style import/export scheduling.
+
+```php
+use Mnb\PHPExcel\MnbExcel;
+
+MnbExcel::importDomainFiles('products', $files, $pdo, 'products', [
+    'import_options' => ['duplicate_strategy' => 'update', 'unique_by' => ['sku']],
+]);
+
+$queue = MnbExcel::queue(__DIR__ . '/storage/queue');
+$queue->enqueueDomainImport('products', 'products.xlsx', $databaseConfig, 'products');
+MnbExcel::workQueue(__DIR__ . '/storage/queue');
+
+MnbExcel::scheduler(__DIR__ . '/storage/schedule.json')
+    ->scheduleExport('daily-report', '0 6 * * *', $rows, __DIR__ . '/reports/daily.xlsx');
+```
+
+Native pivot generation is available on `WorkbookBuilder::addPivotTable()`. Template-driven pivot preservation remains available for highly customized pivots, slicers, and data-model workbooks. See `docs/FULL_WORKFLOWS_1_5.md`.
+
 ## v1.4 typed domain import APIs
 
 The database/application packages now provide first-class imports for users, products, orders, inventory, students, attendance, marks, contacts, locations, blog posts, media paths, and categories. Each preset includes canonical columns, common header aliases, validation, defaults, normalization, duplicate keys, template metadata, and cross-field rules.
@@ -85,7 +106,7 @@ The convenience layer remains configurable: aliases, mappings, rules, defaults, 
 
 ## v1.3 full Excel APIs
 
-The native XLSX module now includes direct cell/range access, complete style metadata, typed rich text, embedded-image extraction, semantic header detection, validated import templates, arbitrary freeze panes, advanced native filters, native conditional formatting, native charts, and template-driven pivot-table rebinding.
+The native XLSX module now includes direct cell/range access, complete style metadata, typed rich text, embedded-image extraction, semantic header detection, validated import templates, arbitrary freeze panes, advanced native filters, native conditional formatting, native charts, and native pivot-table generation plus template-driven pivot preservation.
 
 ```php
 $sheet = Xlsx::read('report.xlsx')->sheet('Sales');

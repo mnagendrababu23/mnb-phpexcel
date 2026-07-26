@@ -120,7 +120,7 @@ try {
 PHP);
 
 $runIsolated('complete application family', ['core', 'csv', 'json', 'xml', 'xlsx', 'ods', 'xls', 'database', 'application'], <<<'PHP'
-check(\Mnb\PHPExcel\MnbExcel::version() === '1.4.0', 'Legacy facade version mismatch');
+check(\Mnb\PHPExcel\MnbExcel::version() === '1.5.0', 'Legacy facade version mismatch');
 check(method_exists(\Mnb\PHPExcel\MnbExcel::class, 'importProducts'), 'Domain facade methods should be installed');
 $formats = \Mnb\PHPExcel\SpreadsheetManager::create()->formats();
 foreach (['csv', 'json', 'xml', 'xlsx', 'ods', 'xls'] as $format) {

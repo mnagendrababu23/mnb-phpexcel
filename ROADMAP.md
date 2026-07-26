@@ -1,5 +1,12 @@
 # MNB PHPExcel Roadmap
 
+## v1.5.0 — Full workflow orchestration: completed
+
+- Native common-formula evaluation with compatibility fallback.
+- From-scratch pivot-table generation.
+- Multi-file imports, filesystem queue/worker, AJAX upload handler, API dispatcher, spreadsheet mailer, and cron scheduler.
+- Modular release limited to changed packages: core, XLSX, application, and all.
+
 ## v1.4.0 — Typed domain import APIs: completed
 
 - Domain-specific APIs for users, products, orders, inventory, students, attendance, marks, contacts, locations, blog posts, media paths, and categories.

@@ -19,7 +19,7 @@ MNB PHPExcel keeps the native XLSX path lightweight while making heavyweight com
 - The native core does not contain a heavyweight formula engine.
 - Legacy binary XLS reading is isolated in the optional XLS module.
 - ODS writing and legacy XLS writing are not currently included.
-- Pivot tables are produced through a trusted template workflow; a from-scratch pivot-layout designer is not advertised.
+- Pivot tables can be generated natively with `addPivotTable()` or preserved/rebound from trusted templates for advanced layouts.
 - Macros are never executed.
 - Large streaming output intentionally has a smaller formatting surface than normal workbook output.
 

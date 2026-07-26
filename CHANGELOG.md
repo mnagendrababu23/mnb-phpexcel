@@ -1,5 +1,31 @@
 # Changelog
 
+## 1.5.0 — Full Workflow Orchestration and Native Pivot/Formula APIs
+
+### Added
+
+- Built-in native formula evaluator for arithmetic, comparisons, ranges, text operations, conditionals, date helpers, and common aggregate/math functions.
+- Automatic formula evaluator selection with PhpSpreadsheet compatibility fallback when installed.
+- Native `WorkbookBuilder::addPivotTable()` generation with row, column, page/filter, and data fields plus common aggregation functions.
+- Durable filesystem queue, retry handling, worker, spreadsheet import/export job helpers, and queue statistics.
+- Multi-file SQL and domain import coordination with aggregate progress and per-file error isolation.
+- AJAX upload validation/storage helper and framework-neutral spreadsheet API dispatcher.
+- MIME mail messages, native/callback mail transports, and generated-spreadsheet attachment delivery.
+- Persistent five-field cron scheduler with direct scheduled imports and exports.
+- End-to-end v1.5 regression coverage and real pivot XLSX/LibreOffice validation.
+
+### Changed
+
+- Version increased to `1.5.0`.
+- Only `core`, `xlsx`, `application`, and `all` require new v1.5 split-package releases; unchanged format/database packages remain compatible through `^1.4`.
+- Legacy XLS remains isolated in its dedicated module, while the complete `all` install includes it and the formula compatibility engine.
+
+### Compatibility
+
+- Existing v1.4 APIs and defaults remain valid.
+- Framework adapters are no longer required for queues, uploads, APIs, mail attachments, or schedules; adapters may still bridge native framework objects.
+- Template pivot preservation remains supported beside the new native pivot builder.
+
 ## 1.4.0 — Typed Domain Import APIs
 
 ### Added

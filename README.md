@@ -9,7 +9,7 @@ PHP Array ⇄ XLSX ⇄ CSV ⇄ JSON ⇄ XML ⇄ SQL
 Current development release:
 
 ```text
-v1.6.0 — Full Runtime Compatibility and Production Workflow Backends
+v1.7.0 — Password-Encrypted XLSX and Document Protection
 ```
 
 This package keeps the rich workbook reader/writer optimized for **small and normal files**. Large XLSX files are handled through separate **preflight/advisor + streaming import/export** layers so applications do not load huge workbooks into PHP arrays.
@@ -54,6 +54,46 @@ foreach (Xlsx::read('orders.xlsx', $options)->rows() as $row) {
 ```
 
 See `docs/MODULAR_PACKAGES.md` for package ownership and release instructions.
+
+## v1.7 XLSX encryption and protection APIs
+
+v1.7 adds standards-compatible password-to-open encryption for XLSX files and native workbook/worksheet protection. Both ECMA-376 Agile AES-256/SHA-512 and compatibility-oriented Standard AES-128/SHA-1 containers are supported for reading and writing. Encrypted files work through normal reads, large reads, metadata inspection, upload validation, and integrity validation.
+
+```php
+use Mnb\PHPExcel\Format\Xlsx;
+use Mnb\PHPExcel\MnbExcel;
+use Mnb\PHPExcel\Reader\Options\ReaderOptions;
+
+// Encrypt an existing XLSX. Agile AES-256 is the secure default.
+MnbExcel::encryptXlsx('report.xlsx', 'report-secure.xlsx', 'S3cret!');
+
+// Standard AES-128 mode maximizes compatibility with older/free viewers.
+MnbExcel::encryptXlsx('report.xlsx', 'report-compatible.xlsx', 'S3cret!', [
+    'mode' => 'standard',
+]);
+
+// Read through the normal API.
+$options = ReaderOptions::defaults()->withPassword('S3cret!');
+$rows = Xlsx::read('report-secure.xlsx', $options)->sheet('Report')->toArray();
+
+// Stream an encrypted workbook through the large-file API.
+MnbExcel::largeRead('report-secure.xlsx', ['password' => 'S3cret!'])
+    ->withHeader()
+    ->chunk(1000, function (array $rows): void {
+        // import rows
+    });
+
+// Encrypt the final file and protect workbook structure and worksheets.
+MnbExcel::report($rows)
+    ->passwordProtectOutput('S3cret!', [
+        'encryption_options' => ['mode' => 'agile'],
+        'protect_workbook' => true,
+        'protect_sheets' => true,
+    ])
+    ->save('protected-report.xlsx');
+```
+
+File encryption controls whether the workbook can be opened. Workbook and worksheet protection control editing actions after opening and are not a replacement for encryption. See `docs/XLSX_SECURITY_1_7.md`.
 
 ## v1.6 full compatibility APIs
 

@@ -1,5 +1,14 @@
 # MNB PHPExcel Roadmap
 
+## v1.7.0 — XLSX encryption and document protection: completed
+
+- ECMA-376 Agile AES-256 and Standard AES-128 XLSX encryption/decryption.
+- Interoperable OLE/CFB v3 packaging with FAT, miniFAT, and DIFAT support.
+- Password-aware normal reads, large reads, inspection, upload checks, and integrity validation.
+- Native workbook-structure and worksheet-action protection with modern and legacy verifiers.
+- Explicit encryption/protection facade and format APIs.
+- Wrong-password, external-suite interoperability, large-container, and protection regression coverage.
+
 ## v1.6.0 — Full runtime compatibility and production backends: completed
 
 - Pure-PHP ZIP/XML fallbacks with automatic native-extension acceleration.

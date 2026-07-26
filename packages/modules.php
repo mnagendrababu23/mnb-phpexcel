@@ -82,8 +82,13 @@ return [
     ],
     'xlsx' => [
         'name' => 'mnb/mnb-phpexcel-xlsx',
-        'description' => 'Native XLSX reader/writer, formula engine, pivot generation, and low-memory streaming module for MNB PHPExcel.',
-        'require' => ['php' => '>=8.1', 'mnb/mnb-phpexcel-core' => '^1.6'],
+        'description' => 'Native XLSX reader/writer with password encryption, document protection, formulas, pivots, and low-memory streaming for MNB PHPExcel.',
+        'require' => [
+            'php' => '>=8.1',
+            'ext-iconv' => '*',
+            'ext-openssl' => '*',
+            'mnb/mnb-phpexcel-core' => '^1.7',
+        ],
         'suggest' => [
             'ext-zip' => 'Recommended for native high-performance XLSX package access; a pure-PHP fallback is included.',
             'ext-xmlreader' => 'Recommended for true streaming XLSX reads; a pure-PHP fallback is included.',
@@ -105,6 +110,7 @@ return [
             'src/Reader/XlsxImageExtractor.php',
             'src/Reader/XlsxInspector.php',
             'src/Reader/XlsxMetadataExtractor.php',
+            'src/Reader/XlsxProtectionReader.php',
             'src/Reader/XlsxReader.php',
             'src/Reader/XlsxStyleMap.php',
             'src/Reader/XlsxWorkbookResolver.php',
@@ -158,11 +164,11 @@ return [
         'description' => 'Legacy facade, workbook builder, application helpers, plugins, diagnostics, and full workflow API for MNB PHPExcel.',
         'require' => [
             'php' => '>=8.1',
-            'mnb/mnb-phpexcel-core' => '^1.6',
+            'mnb/mnb-phpexcel-core' => '^1.7',
             'mnb/mnb-phpexcel-csv' => '^1.4',
             'mnb/mnb-phpexcel-json' => '^1.4',
             'mnb/mnb-phpexcel-xml' => '^1.6',
-            'mnb/mnb-phpexcel-xlsx' => '^1.6',
+            'mnb/mnb-phpexcel-xlsx' => '^1.7',
             'mnb/mnb-phpexcel-ods' => '^1.6',
             'mnb/mnb-phpexcel-xls' => '^1.6',
             'mnb/mnb-phpexcel-database' => '^1.4',
@@ -194,7 +200,7 @@ return [
         'name' => 'mnb/mnb-phpexcel-all',
         'description' => 'Metapackage installing every MNB PHPExcel module.',
         'type' => 'metapackage',
-        'require' => ['php' => '>=8.1', 'mnb/mnb-phpexcel-application' => '^1.6'],
+        'require' => ['php' => '>=8.1', 'mnb/mnb-phpexcel-application' => '^1.7'],
         'files' => [],
     ],
 ];

@@ -1,6 +1,6 @@
 # Modular package distribution
 
-MNB PHPExcel 1.2 can be released as a package family so applications download only the formats they use.
+MNB PHPExcel 1.7 can be released as a package family so applications download only the formats they use.
 
 ## Install examples
 
@@ -30,7 +30,7 @@ Xlsx::write($rows, 'orders.xlsx', [
 ]);
 ```
 
-Required extensions: `ext-zip` and `ext-xmlreader`.
+Required for XLSX security: `ext-openssl` and `ext-iconv`. Native `ext-zip` and `ext-xmlreader` are recommended for maximum streaming performance; secure pure-PHP fallbacks are included.
 
 ### XML only
 
@@ -55,7 +55,7 @@ foreach (Xml::read('catalog.xml', [
 }
 ```
 
-Required extension: `ext-xmlreader`.
+Native `ext-xmlreader` is recommended for true forward-only streaming; a secure pure-PHP fallback is included.
 
 ### CSV and JSON only
 
@@ -69,7 +69,7 @@ composer require mnb/mnb-phpexcel-csv mnb/mnb-phpexcel-json
 composer require mnb/mnb-phpexcel-ods
 ```
 
-The native ODS module currently provides streaming reads. It requires `ext-zip` and `ext-xmlreader`.
+The native ODS module provides streaming reads. Native `ext-zip` and `ext-xmlreader` are recommended for the lowest-memory path; pure-PHP fallbacks are included.
 
 ### Legacy XLS only
 
@@ -108,9 +108,9 @@ The existing package remains the backward-compatible monolith. It declares `repl
 | `mnb/mnb-phpexcel-core` | Data model, read session, typed options, projection, progress, error policies, registry | PHP, JSON |
 | `mnb/mnb-phpexcel-csv` | CSV reader/writer and encoding/dialect handling | core |
 | `mnb/mnb-phpexcel-json` | JSON, streaming JSON-array, NDJSON reader/writer | core |
-| `mnb/mnb-phpexcel-xml` | Streaming XML, schema mapping, XML writer | core, XMLReader |
-| `mnb/mnb-phpexcel-xlsx` | Native XLSX read/write, merged cells, formulas, large streaming | core, ZIP, XMLReader |
-| `mnb/mnb-phpexcel-ods` | Native ODS streaming reader | core, ZIP, XMLReader |
+| `mnb/mnb-phpexcel-xml` | Streaming XML, schema mapping, XML writer | core; XMLReader recommended |
+| `mnb/mnb-phpexcel-xlsx` | Native XLSX read/write, encryption, protection, formulas, pivots, large streaming | core, OpenSSL, iconv; ZIP/XMLReader recommended |
+| `mnb/mnb-phpexcel-ods` | Native ODS streaming reader | core; ZIP/XMLReader recommended |
 | `mnb/mnb-phpexcel-xls` | Optional binary XLS adapter | core, PhpSpreadsheet |
 | `mnb/mnb-phpexcel-database` | PDO imports, manifests, failed rows, database streaming | core, XLSX, PDO |
 | `mnb/mnb-phpexcel-application` | Legacy facade, workbook builder, profiles, storage, plugins | all functional modules |

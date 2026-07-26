@@ -1,6 +1,6 @@
 {
     "name": "mnb/mnb-phpexcel",
-    "description": "Framework-neutral modular PHP spreadsheet toolkit for XLSX, CSV, JSON, XML, ODS, optional XLS, SQL, and low-memory streaming workflows.",
+    "description": "Framework-neutral modular PHP spreadsheet toolkit for XLSX, XLS, CSV, JSON, XML, ODS, SQL, distributed jobs, HTTP workflows, and low-memory streaming.",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -14,8 +14,8 @@
         "ext-json": "*"
     },
     "suggest": {
-        "ext-zip": "Required for XLSX read/write support.",
-        "ext-xmlreader": "Required for XLSX and XML read support.",
+        "ext-zip": "Recommended for maximum XLSX/ODS package performance; a pure-PHP fallback is included.",
+        "ext-xmlreader": "Recommended for true low-memory XML/XLSX/ODS streaming; a secure pure-PHP fallback is included.",
         "ext-pdo": "Required for SQL import/export helpers.",
         "ext-mbstring": "Recommended for better UTF-8/legacy encoding handling.",
         "ext-iconv": "Recommended for CSV encoding conversion.",
@@ -23,7 +23,7 @@
         "mnb/mnb-phpexcel-xlsx": "Install only native XLSX support in modular deployments.",
         "mnb/mnb-phpexcel-xml": "Install only XML support in modular deployments.",
         "mnb/mnb-phpexcel-all": "Install the complete split-package family.",
-        "phpoffice/phpspreadsheet": "Adds compatibility for formulas outside the native engine and powers the legacy XLS module."
+        "phpoffice/phpspreadsheet": "Installed automatically by the XLS/all split packages for BIFF8 XLS and specialist formula compatibility."
     },
     "replace": {
         "mnb/mnb-phpexcel-core": "self.version",

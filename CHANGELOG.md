@@ -1,5 +1,37 @@
 # Changelog
 
+## 1.6.0 — Full Runtime Compatibility and Production Workflow Backends
+
+### Added
+
+- Secure pure-PHP ZIP package adapter with native `ZipArchive` delegation when available.
+- Secure pure-PHP XML reader adapter with native `XMLReader` delegation for true streaming.
+- Functional XLSX, XML, and ODS operation without hard ZIP/XMLReader extension requirements.
+- Legacy BIFF8 `.xls` writing through the dedicated XLS compatibility package.
+- Expanded native formula functions, two-dimensional lookup ranges, conditional aggregates, date/text/math functions, and an instance-scoped custom-function registry.
+- Advanced pivot layouts, subtotals, sorting, repeated labels, show-values-as modes, field options, and display controls.
+- Queue backend contract, transactional PDO queue, reservation visibility timeouts, multi-worker claims, retry/recovery, and retained filesystem backend.
+- Scheduler store contract, transactional PDO scheduler, named cron fields/macros, long-running process runner, locking, bounded cycles, and graceful signals.
+- Framework-neutral HTTP endpoint with bearer/HMAC/CSRF authentication, CORS, method checks, JSON/form/file input, uniform responses, and file/PDO rate limiters.
+- Complete dependency-free AJAX uploader client with progress and completion events.
+- Native SMTP/SMTPS/STARTTLS transport, AUTH LOGIN/PLAIN, multipart MIME, multiple recipients, and attachments.
+- Full v1.6 fallback, SMTP, HTTP, pivot, formula, queue, scheduler, and XLS API regression coverage.
+
+### Changed
+
+- Version increased to `1.6.0`.
+- Native ZIP/XMLReader extensions are performance recommendations instead of functional hard requirements for split XLSX/XML/ODS packages.
+- The XLS split package now supports both read and write and installs PhpSpreadsheet as its declared compatibility dependency.
+- Application workflows can use filesystem or PDO-backed queue/schedule/rate-limit storage.
+- The complete split package family requires matching v1.6 releases for core, XML, XLSX, ODS, XLS, application, and all; CSV, JSON, and database remain compatible through their existing constraints.
+
+### Compatibility
+
+- Existing v1.5 APIs and filesystem workflows remain valid.
+- Native extensions are selected automatically and remain strongly recommended for very large files.
+- Pure-PHP XML fallback rejects document types and entities and may materialize XML tokens, so it is not advertised as the huge-file streaming path.
+- Specialist/vendor formula functions may use the XLS/all package compatibility engine or a registered custom function.
+
 ## 1.5.0 — Full Workflow Orchestration and Native Pivot/Formula APIs
 
 ### Added

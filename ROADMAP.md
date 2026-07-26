@@ -1,5 +1,16 @@
 # MNB PHPExcel Roadmap
 
+## v1.6.0 — Full runtime compatibility and production backends: completed
+
+- Pure-PHP ZIP/XML fallbacks with automatic native-extension acceleration.
+- Functional XLSX, XML, and ODS support without hard ZIP/XMLReader requirements.
+- Legacy XLS reading and writing in the dedicated compatibility package.
+- Expanded formulas and custom function registration.
+- Advanced standard pivot generation.
+- Filesystem and transactional PDO queues, schedules, and rate limiters.
+- Complete HTTP/AJAX endpoint helpers, SMTP delivery, and long-running scheduler runner.
+- Isolated package, fallback runtime, package-integrity, and LibreOffice compatibility verification.
+
 ## v1.5.0 — Full workflow orchestration: completed
 
 - Native common-formula evaluation with compatibility fallback.

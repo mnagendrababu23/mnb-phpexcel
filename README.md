@@ -9,7 +9,7 @@ PHP Array ⇄ XLSX ⇄ CSV ⇄ JSON ⇄ XML ⇄ SQL
 Current development release:
 
 ```text
-v1.5.0 — Full Workflow Orchestration and Native Pivot/Formula APIs
+v1.6.0 — Full Runtime Compatibility and Production Workflow Backends
 ```
 
 This package keeps the rich workbook reader/writer optimized for **small and normal files**. Large XLSX files are handled through separate **preflight/advisor + streaming import/export** layers so applications do not load huge workbooks into PHP arrays.
@@ -54,6 +54,30 @@ foreach (Xlsx::read('orders.xlsx', $options)->rows() as $row) {
 ```
 
 See `docs/MODULAR_PACKAGES.md` for package ownership and release instructions.
+
+## v1.6 full compatibility APIs
+
+v1.6 removes hard ZIP/XMLReader requirements from functional XLSX, XML, and ODS workflows by adding secure pure-PHP package/XML fallbacks while retaining automatic native-extension streaming when available. It also adds legacy XLS writing through the dedicated XLS package, expanded formulas and custom functions, advanced pivot layouts, transactional PDO queues, persistent PDO schedules, a process runner, authenticated HTTP endpoints, a complete AJAX client, rate limiting, and SMTP/STARTTLS delivery.
+
+```php
+use Mnb\PHPExcel\MnbExcel;
+use Mnb\PHPExcel\Format\Xls;
+
+// Native or fallback XLSX/XML/ODS operation is selected automatically.
+$rows = MnbExcel::read('orders.xlsx')->sheet('Orders')->toArray();
+
+// The XLS split package installs its BIFF8 compatibility engine.
+Xls::write($rows, 'orders.xls');
+
+// Multi-host queue and schedule storage.
+$queue = MnbExcel::pdoQueue($pdo);
+$scheduler = MnbExcel::pdoScheduler($pdo);
+
+// Full backend HTTP endpoint and SMTP delivery are framework-neutral.
+$response = MnbExcel::apiHttp($options, $pdo); // handles PHP superglobals
+```
+
+For huge XML/XLSX/ODS documents, install native `ext-zip` and `ext-xmlreader` to retain true forward-only, bounded-memory streaming. The fallback path prioritizes portability and correctness. See `docs/FULL_COMPATIBILITY_1_6.md`.
 
 ## v1.5 full workflow APIs
 

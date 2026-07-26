@@ -9,7 +9,7 @@ PHP Array ⇄ XLSX ⇄ CSV ⇄ JSON ⇄ XML ⇄ SQL
 Current development release:
 
 ```text
-v1.3.0 — Full Excel Cell, Presentation, Template, and Pivot Workflows
+v1.4.0 — Typed Domain Import APIs
 ```
 
 This package keeps the rich workbook reader/writer optimized for **small and normal files**. Large XLSX files are handled through separate **preflight/advisor + streaming import/export** layers so applications do not load huge workbooks into PHP arrays.
@@ -54,6 +54,34 @@ foreach (Xlsx::read('orders.xlsx', $options)->rows() as $row) {
 ```
 
 See `docs/MODULAR_PACKAGES.md` for package ownership and release instructions.
+
+## v1.4 typed domain import APIs
+
+The database/application packages now provide first-class imports for users, products, orders, inventory, students, attendance, marks, contacts, locations, blog posts, media paths, and categories. Each preset includes canonical columns, common header aliases, validation, defaults, normalization, duplicate keys, template metadata, and cross-field rules.
+
+```php
+use Mnb\PHPExcel\MnbExcel;
+
+$preview = MnbExcel::previewDomainImport('products', 'products.xlsx', [
+    'sheet' => 'Products',
+    'limit' => 25,
+]);
+
+$result = MnbExcel::importProducts('products.xlsx', $pdo, 'products', [
+    'duplicate_strategy' => 'update',
+    'unique_by' => ['sku'],
+    'batch_size' => 1000,
+    'failed_rows_csv' => __DIR__ . '/failed-products.csv',
+]);
+```
+
+Generate a validated Excel template from the same preset:
+
+```php
+MnbExcel::domainImportTemplate('products')->save('product-import-template.xlsx');
+```
+
+The convenience layer remains configurable: aliases, mappings, rules, defaults, normalizers, transformers, unique keys, duplicate policies, progress callbacks, and row-error callbacks can be overridden. See `docs/DOMAIN_IMPORTS_1_4.md`.
 
 ## v1.3 full Excel APIs
 

@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.4.0 — Typed Domain Import APIs
+
+### Added
+
+- First-class presets for users, products, orders, inventory, students, attendance, marks, contacts, locations, blog posts, media paths, and categories.
+- `DomainImportType`, `DomainImportPreset`, instance-scoped `DomainImportRegistry`, and streaming `DomainImporter` APIs.
+- Domain schema inspection, dry-run previews, validated templates, alias-aware mapping, value normalization, cross-field rules, duplicate policies, progress callbacks, and failed-row reporting.
+- High-level `MnbExcel::importUsers()`, `importProducts()`, `importOrders()`, `importInventory()`, `importStudents()`, `importAttendance()`, `importMarks()`, `importContacts()`, `importLocations()`, `importBlogPosts()`, `importImagesWithPaths()`, `importMedia()`, and `importCategories()` methods.
+- `max_length` and `min_length` validation rules.
+- Dedicated domain API and isolated modular-package tests.
+
+### Changed
+
+- Version increased to `1.4.0`.
+- Split package dependencies now target the matching `^1.4` family.
+- The database package owns domain presets/services; the application package exposes facade methods. No additional split repository is required.
+
+### Compatibility
+
+- Existing generic imports and v1.3 APIs remain available.
+- Presets do not force a fixed database schema: table names, mappings, aliases, rules, defaults, normalizers, transformers, and unique keys are overridable.
+- The same domain API can consume any installed reader format.
+
 ## 1.3.0 — Full Excel Cell, Presentation, Template, and Pivot Workflows
 
 ### Added

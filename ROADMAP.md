@@ -1,5 +1,12 @@
 # MNB PHPExcel Roadmap
 
+## v1.4.0 — Typed domain import APIs: completed
+
+- Domain-specific APIs for users, products, orders, inventory, students, attendance, marks, contacts, locations, blog posts, media paths, and categories.
+- Canonical schemas, aliases, rules, defaults, normalization, unique keys, templates, and cross-field validation.
+- Preview, dry-run, batch insert/upsert, failed-row export, progress reporting, and duplicate handling.
+- Existing generic import engine retained as the implementation foundation and extension escape hatch.
+
 ## v1.3.0 — Full Excel capability upgrade: completed
 
 - Direct cell, multi-cell, range, cell-detail, style, rich-text, and image APIs.

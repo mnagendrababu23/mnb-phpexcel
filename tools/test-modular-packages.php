@@ -105,8 +105,23 @@ foreach (['xml', 'xlsx', 'ods', 'xls'] as $format) {
         . "check(\$formats === ['{$format}'], 'Only {$format} should be registered');\n");
 }
 
+$runIsolated('domain imports with CSV reader', ['core', 'csv', 'xlsx', 'database'], <<<'PHP'
+$temp = tempnam(sys_get_temp_dir(), 'mnb_domain_');
+file_put_contents($temp, "Product Code,Product Name,Selling Price\nSKU-1,Keyboard,$49.99\n");
+try {
+    $result = \Mnb\PHPExcel\Import\DomainImporter::create()->preview('products', $temp, [
+        'format' => 'csv',
+        'header_row' => true,
+    ]);
+    check(($result['valid_rows'] ?? 0) === 1, 'Domain product preview failed');
+    check(($result['mapping']['product_code'] ?? null) === 'sku', 'Domain alias mapping failed');
+    check(($result['sample_rows'][0]['data']['price'] ?? null) === 49.99, 'Domain decimal normalization failed');
+} finally { @unlink($temp); }
+PHP);
+
 $runIsolated('complete application family', ['core', 'csv', 'json', 'xml', 'xlsx', 'ods', 'xls', 'database', 'application'], <<<'PHP'
-check(\Mnb\PHPExcel\MnbExcel::version() === '1.3.0', 'Legacy facade version mismatch');
+check(\Mnb\PHPExcel\MnbExcel::version() === '1.4.0', 'Legacy facade version mismatch');
+check(method_exists(\Mnb\PHPExcel\MnbExcel::class, 'importProducts'), 'Domain facade methods should be installed');
 $formats = \Mnb\PHPExcel\SpreadsheetManager::create()->formats();
 foreach (['csv', 'json', 'xml', 'xlsx', 'ods', 'xls'] as $format) {
     check(in_array($format, $formats, true), 'Missing installed format: ' . $format);

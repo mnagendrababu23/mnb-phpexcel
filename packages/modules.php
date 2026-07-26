@@ -45,7 +45,7 @@ return [
     'csv' => [
         'name' => 'mnb/mnb-phpexcel-csv',
         'description' => 'CSV reader/writer module for MNB PHPExcel.',
-        'require' => ['php' => '>=8.1', 'mnb/mnb-phpexcel-core' => '^1.3'],
+        'require' => ['php' => '>=8.1', 'mnb/mnb-phpexcel-core' => '^1.4'],
         'files' => [
             'src/Format/Csv.php',
             'src/Reader/CsvReader.php',
@@ -57,7 +57,7 @@ return [
     'json' => [
         'name' => 'mnb/mnb-phpexcel-json',
         'description' => 'Streaming JSON and NDJSON reader/writer module for MNB PHPExcel.',
-        'require' => ['php' => '>=8.1', 'ext-json' => '*', 'mnb/mnb-phpexcel-core' => '^1.3'],
+        'require' => ['php' => '>=8.1', 'ext-json' => '*', 'mnb/mnb-phpexcel-core' => '^1.4'],
         'files' => [
             'src/Format/Json.php',
             'src/Reader/JsonReader.php',
@@ -69,7 +69,7 @@ return [
     'xml' => [
         'name' => 'mnb/mnb-phpexcel-xml',
         'description' => 'Streaming XML reader, schema mapping, and XML writer module for MNB PHPExcel.',
-        'require' => ['php' => '>=8.1', 'ext-xmlreader' => '*', 'mnb/mnb-phpexcel-core' => '^1.3'],
+        'require' => ['php' => '>=8.1', 'ext-xmlreader' => '*', 'mnb/mnb-phpexcel-core' => '^1.4'],
         'files' => [
             'src/Format/Xml.php',
             'src/Reader/XmlReader.php',
@@ -80,7 +80,7 @@ return [
     'xlsx' => [
         'name' => 'mnb/mnb-phpexcel-xlsx',
         'description' => 'Native XLSX reader/writer and low-memory streaming XLSX module for MNB PHPExcel.',
-        'require' => ['php' => '>=8.1', 'ext-zip' => '*', 'ext-xmlreader' => '*', 'mnb/mnb-phpexcel-core' => '^1.3'],
+        'require' => ['php' => '>=8.1', 'ext-zip' => '*', 'ext-xmlreader' => '*', 'mnb/mnb-phpexcel-core' => '^1.4'],
         'suggest' => [
             'phpoffice/phpspreadsheet' => 'Enables true formula recalculation through the optional formula evaluator.',
         ],
@@ -114,7 +114,7 @@ return [
     'ods' => [
         'name' => 'mnb/mnb-phpexcel-ods',
         'description' => 'Native streaming ODS reader module for MNB PHPExcel.',
-        'require' => ['php' => '>=8.1', 'ext-zip' => '*', 'ext-xmlreader' => '*', 'mnb/mnb-phpexcel-core' => '^1.3'],
+        'require' => ['php' => '>=8.1', 'ext-zip' => '*', 'ext-xmlreader' => '*', 'mnb/mnb-phpexcel-core' => '^1.4'],
         'files' => ['src/Format/Ods.php', 'src/Reader/OdsReader.php'],
     ],
     'xls' => [
@@ -122,17 +122,18 @@ return [
         'description' => 'Optional legacy XLS reader adapter for MNB PHPExcel.',
         'require' => [
             'php' => '>=8.1',
-            'mnb/mnb-phpexcel-core' => '^1.3',
+            'mnb/mnb-phpexcel-core' => '^1.4',
             'phpoffice/phpspreadsheet' => '^2.1 || ^3.3 || ^4.0 || ^5.0',
         ],
         'files' => ['src/Compatibility/XlsReader.php', 'src/Format/Xls.php'],
     ],
     'database' => [
         'name' => 'mnb/mnb-phpexcel-database',
-        'description' => 'PDO import/export, validation, resumable manifests, and failed-row reporting for MNB PHPExcel.',
-        'require' => ['php' => '>=8.1', 'ext-pdo' => '*', 'mnb/mnb-phpexcel-core' => '^1.3', 'mnb/mnb-phpexcel-xlsx' => '^1.3'],
+        'description' => 'PDO imports, typed domain presets, validation, resumable manifests, and failed-row reporting for MNB PHPExcel.',
+        'require' => ['php' => '>=8.1', 'ext-pdo' => '*', 'mnb/mnb-phpexcel-core' => '^1.4', 'mnb/mnb-phpexcel-xlsx' => '^1.4'],
         'files' => [
             'src/Contracts/DatabaseTargetInterface.php',
+            'src/Domain/*.php',
             'src/Import/*.php',
             'src/Large/LargeExcelDatabaseImportEngine.php',
             'src/Large/LargeFailedRowsCsvWriter.php',
@@ -148,14 +149,14 @@ return [
         'description' => 'Legacy facade, workbook builder, application helpers, plugins, diagnostics, and full workflow API for MNB PHPExcel.',
         'require' => [
             'php' => '>=8.1',
-            'mnb/mnb-phpexcel-core' => '^1.3',
-            'mnb/mnb-phpexcel-csv' => '^1.3',
-            'mnb/mnb-phpexcel-json' => '^1.3',
-            'mnb/mnb-phpexcel-xml' => '^1.3',
-            'mnb/mnb-phpexcel-xlsx' => '^1.3',
-            'mnb/mnb-phpexcel-ods' => '^1.3',
-            'mnb/mnb-phpexcel-xls' => '^1.3',
-            'mnb/mnb-phpexcel-database' => '^1.3',
+            'mnb/mnb-phpexcel-core' => '^1.4',
+            'mnb/mnb-phpexcel-csv' => '^1.4',
+            'mnb/mnb-phpexcel-json' => '^1.4',
+            'mnb/mnb-phpexcel-xml' => '^1.4',
+            'mnb/mnb-phpexcel-xlsx' => '^1.4',
+            'mnb/mnb-phpexcel-ods' => '^1.4',
+            'mnb/mnb-phpexcel-xls' => '^1.4',
+            'mnb/mnb-phpexcel-database' => '^1.4',
         ],
         'files' => [
             'src/Application/ImportDashboardHelper.php',
@@ -176,7 +177,7 @@ return [
         'name' => 'mnb/mnb-phpexcel-all',
         'description' => 'Metapackage installing every MNB PHPExcel module.',
         'type' => 'metapackage',
-        'require' => ['php' => '>=8.1', 'mnb/mnb-phpexcel-application' => '^1.3'],
+        'require' => ['php' => '>=8.1', 'mnb/mnb-phpexcel-application' => '^1.4'],
         'files' => [],
     ],
 ];

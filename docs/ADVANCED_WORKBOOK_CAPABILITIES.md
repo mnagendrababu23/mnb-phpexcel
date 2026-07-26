@@ -1,27 +1,30 @@
 # Advanced Workbook Capabilities
 
-MNB PHPExcel separates application workflows from specialist spreadsheet manipulation.
+MNB PHPExcel keeps the native XLSX path lightweight while making heavyweight compatibility engines optional.
 
-## Current strengths
+## v1.3 capability matrix
 
-- Small/normal XLSX writer with styles, comments, hyperlinks, merged cells, reports, formulas with cached values, and integrity validation
-- Large XLSX streaming reader/writer with low-memory import/export
-- Database import/export workflows, progress manifests, failed rows, and dashboard responses
-- Plugin-level validators, transformers, events, profiles, and framework-neutral adapters
-
-## Current/planned advanced areas
-
-| Area | Current status | Recommended approach |
+| Area | Status | Coverage |
 |---|---|---|
-| Deep cell-level editing | Partial | Use normal writer for generated reports; use future adapter for existing complex workbook editing |
-| Many spreadsheet formats | Partial | Core supports XLSX/CSV/JSON/XML/CSV ZIP; add ODS/HTML/NDJSON through plugins |
-| Advanced style manipulation | Partial | Normal mode can be rich; large mode should remain style-limited for safety |
-| Formula calculation engine | Not in core | Write formulas/cached values; use adapter/specialist library for calculation |
-| Complex workbook manipulation | Partial preservation | Preserve advanced parts safely, validate integrity, do not claim full pivot/chart/macro editing in core |
+| Direct cell/range access | Supported | Single cells, multiple cells, ranges, typed snapshots, styles, rich text, images |
+| Spreadsheet formats | Modular | XLSX, CSV/TSV, JSON/NDJSON, XML, ODS read, optional XLS read |
+| Advanced styles | Supported | Fonts, fills, borders, alignment, protection, number formats, conditional formatting |
+| Formula calculation | Optional adapter | Formula/cached values natively; true recalculation through the PhpSpreadsheet adapter |
+| Charts | Supported | Column, bar, line, area, pie, doughnut, and scatter chart generation |
+| Pivot tables | Template workflow | Preserve pivot parts, rebind source range, and refresh the cache on open |
+| Complex templates | Supported for trusted templates | Preserve comments, hyperlinks, drawings, images, charts, pivots, tables, and related parts |
 
-Run in code:
+## Deliberate boundaries
+
+- The native core does not contain a heavyweight formula engine.
+- Legacy binary XLS reading is isolated in the optional XLS module.
+- ODS writing and legacy XLS writing are not currently included.
+- Pivot tables are produced through a trusted template workflow; a from-scratch pivot-layout designer is not advertised.
+- Macros are never executed.
+- Large streaming output intentionally has a smaller formatting surface than normal workbook output.
+
+Run the same matrix in code:
 
 ```php
 $matrix = MnbExcel::advancedWorkbookCapabilities();
 ```
-

@@ -92,6 +92,9 @@ foreach ($definitions as $slug => $package) {
         'minimum-stability' => 'stable',
         'prefer-stable' => true,
     ];
+    if (($package['suggest'] ?? []) !== []) {
+        $composer['suggest'] = (object) $package['suggest'];
+    }
     if (($package['type'] ?? 'library') !== 'metapackage') {
         $composer['autoload'] = ['psr-4' => ['Mnb\\PHPExcel\\' => 'src/']];
         $composer['conflict'] = ['mnb/mnb-phpexcel' => '*'];

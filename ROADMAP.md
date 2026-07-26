@@ -1,5 +1,16 @@
 # MNB PHPExcel Roadmap
 
+## v1.3.0 — Full Excel capability upgrade: completed
+
+- Direct cell, multi-cell, range, cell-detail, style, rich-text, and image APIs.
+- Optional true formula recalculation adapter.
+- Semantic automatic header detection.
+- Reusable validated import templates.
+- Arbitrary freeze panes and advanced native filters.
+- Native conditional formatting and chart generation.
+- Template-driven pivot cache preservation, rebinding, and refresh-on-open.
+- Full modular-package and backward-compatibility smoke coverage.
+
 ## v1.2.0 — Completed Phase 2, Phase 3, and Phase 4 foundation
 
 ### Phase 2 — Real streaming: completed
@@ -84,9 +95,9 @@ Status: completed for the supported rich small/normal-file scope. Large import/e
 - Large XLSX files should not use the normal full-array reader. Use the separate large import mode below.
 - Parallel workers.
 - NDJSON/SQLite staging.
-- Formula calculation engine.
-- Charts and pivot table generation.
-- Old `.xls` binary support.
+- Built-in native formula calculation engine. True recalculation is available through the optional adapter.
+- From-scratch pivot-layout design. Template-driven pivot workflows are supported.
+- Native legacy `.xls` engine. Optional XLS compatibility is available through the XLS module.
 - Macro execution. Macros are never executed; advanced package preservation is available only when explicitly requested from a trusted template.
 
 ## Completed foundation: Large File Import Engine
@@ -106,7 +117,7 @@ Still future:
 - Safe NDJSON chunk converter.
 - Temp disk guard.
 - Queue framework adapters. Import dashboard helper is completed.
-- Deeper advanced-workbook editing and formula calculation engine.
+- Deeper arbitrary existing-workbook object-graph editing.
 
 
 ## Completed foundation: Large File Export Engine
@@ -247,15 +258,15 @@ The package now includes application-level storage, profiles, import status/resu
 
 ## Next advanced spreadsheet roadmap
 
-### AdvancedWorkbookAdapter layer
+### Optional adapter and compatibility expansion
 
-Planned adapter layer for deep workbook workflows that should not bloat the core package:
+The v1.3 release completed the optional PhpSpreadsheet calculation adapter, native conditional formatting, chart generation, ODS reading, NDJSON streaming, and recalculate-on-open support. Future work can remain outside the lightweight core:
 
-- PhpSpreadsheet adapter for deep cell-level spreadsheet editing and formula/calculation-heavy workflows.
-- OpenSpout adapter for alternate streaming read/write comparison paths.
-- ODS/HTML/NDJSON reader/writer plugins through the existing plugin interfaces.
-- Advanced style presets and conditional formatting writer for normal mode.
-- Formula dependency report and recalculate-on-open support before any optional calculation engine work.
+- Deep arbitrary editing of existing complex workbook object graphs.
+- OpenSpout comparison adapter for alternative streaming workflows.
+- ODS writing, HTML table adapters, and additional data-format plugins.
+- Additional chart families and chart-template mutation.
+- Optional formula dependency tracing and calculation diagnostics.
 
 ### Release proof roadmap
 

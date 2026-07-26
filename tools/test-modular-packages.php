@@ -106,7 +106,7 @@ foreach (['xml', 'xlsx', 'ods', 'xls'] as $format) {
 }
 
 $runIsolated('complete application family', ['core', 'csv', 'json', 'xml', 'xlsx', 'ods', 'xls', 'database', 'application'], <<<'PHP'
-check(\Mnb\PHPExcel\MnbExcel::version() === '1.2.0', 'Legacy facade version mismatch');
+check(\Mnb\PHPExcel\MnbExcel::version() === '1.3.0', 'Legacy facade version mismatch');
 $formats = \Mnb\PHPExcel\SpreadsheetManager::create()->formats();
 foreach (['csv', 'json', 'xml', 'xlsx', 'ods', 'xls'] as $format) {
     check(in_array($format, $formats, true), 'Missing installed format: ' . $format);

@@ -1,5 +1,37 @@
 # Changelog
 
+## 1.3.0 — Full Excel Cell, Presentation, Template, and Pivot Workflows
+
+### Added
+
+- Direct `cell()`, `cells()`, `rangeValues()`, `cellDetails()`, `cellStyle()`, and `rangeStyles()` APIs for native XLSX sessions.
+- Typed `CellSnapshot`, `RichText`, `RichTextRun`, and `HeaderDetection` value objects.
+- Complete XLSX style metadata for fonts, fills, borders, number formats, alignment, and protection.
+- Image inventory and collision-safe embedded-image extraction with anchors, dimensions, MIME types, and descriptions.
+- Optional PhpSpreadsheet formula evaluator for true workbook recalculation without increasing the native XLSX package's mandatory dependency footprint.
+- Semantic header detection through `detectHeader()`, `autoDetectHeader()`, and `ReaderOptions::withAutoHeader()`.
+- Reusable import-template generation with instructions, examples, comments, and native data-validation rules.
+- Arbitrary row/column freeze panes and explicit top-left pane selection.
+- Native value, custom, top/bottom, dynamic, and color auto-filter definitions.
+- Native conditional formatting with differential styles, expressions, comparisons, color scales, data bars, icon sets, duplicate/unique rules, text rules, and time periods.
+- Native column, bar, line, area, pie, doughnut, and scatter chart generation.
+- Template-driven pivot-table preservation, workbook pivot-cache relationships, source-range rebinding, and refresh-on-open support.
+- Format-specific XLSX convenience methods and a full-capability v1.3 smoke suite.
+
+### Changed
+
+- Version increased to `1.3.0`.
+- Split packages now depend on the corresponding `^1.3` module family.
+- The XLSX split package suggests PhpSpreadsheet only for optional true formula recalculation.
+- Direct multi-cell reads share worksheet XML, style, date-system, and shared-string state instead of reopening the package for each cell.
+- Cell style reads no longer scan comments, images, and unrelated worksheet metadata.
+
+### Compatibility
+
+- Existing v1.2 APIs and defaults remain valid.
+- Native formula reading still has no extra dependency; only true recalculation uses the optional adapter.
+- Pivot tables are fully supported through trusted templates; a from-scratch pivot-layout designer is not claimed.
+
 ## 1.2.0 — Modular Packages, Real Streaming, Stable Reader API, Advanced Compatibility
 
 ### Added

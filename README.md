@@ -9,7 +9,7 @@ PHP Array ⇄ XLSX ⇄ CSV ⇄ JSON ⇄ XML ⇄ SQL
 Current development release:
 
 ```text
-v1.2.0 — Modular Packages, Real Streaming, Stable Reader API, and Advanced Compatibility
+v1.3.0 — Full Excel Cell, Presentation, Template, and Pivot Workflows
 ```
 
 This package keeps the rich workbook reader/writer optimized for **small and normal files**. Large XLSX files are handled through separate **preflight/advisor + streaming import/export** layers so applications do not load huge workbooks into PHP arrays.
@@ -54,6 +54,20 @@ foreach (Xlsx::read('orders.xlsx', $options)->rows() as $row) {
 ```
 
 See `docs/MODULAR_PACKAGES.md` for package ownership and release instructions.
+
+## v1.3 full Excel APIs
+
+The native XLSX module now includes direct cell/range access, complete style metadata, typed rich text, embedded-image extraction, semantic header detection, validated import templates, arbitrary freeze panes, advanced native filters, native conditional formatting, native charts, and template-driven pivot-table rebinding.
+
+```php
+$sheet = Xlsx::read('report.xlsx')->sheet('Sales');
+$details = $sheet->cellDetails('D12');
+$images = $sheet->extractImages(__DIR__ . '/images');
+
+$rows = Xlsx::read('upload.xlsx')->autoDetectHeader()->toArray();
+```
+
+See `docs/EXCEL_FULL_CAPABILITIES_1_3.md` for complete examples and exact compatibility boundaries.
 
 Required for core package features:
 

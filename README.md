@@ -1411,6 +1411,78 @@ MNB_SQL_EXPORT_FAILED
 MNB_SECURITY_BLOCKED
 ```
 
+## Lightweight XLSX File, Sheet, and Row Information
+
+Use the quick-info APIs when an application needs workbook metadata or row counts before deciding whether to read/import the workbook. These methods inspect the XLSX ZIP package and worksheet XML without converting cell rows into PHP arrays.
+
+```php
+use Mnb\PHPExcel\MnbExcel;
+
+$file = MnbExcel::fileInfo('orders.xlsx');
+
+print_r([
+    'size_bytes' => $file['size_bytes'],
+    'sheet_count' => $file['sheet_count'],
+    'sheet_names' => $file['sheet_names'],
+    'has_macros' => $file['has_macros'],
+    'properties' => $file['properties'],
+]);
+```
+
+Fast sheet information reads workbook relationships and worksheet dimensions only:
+
+```php
+$sheets = MnbExcel::sheetsInfo('orders.xlsx');
+
+foreach ($sheets as $sheet) {
+    printf(
+        "%s: dimension %s, declared last row %d\n",
+        $sheet['name'],
+        $sheet['dimension'] ?? 'unknown',
+        $sheet['declared_last_row']
+    );
+}
+```
+
+For accurate counts, worksheet XML is scanned without hydrating row values:
+
+```php
+$sheet = MnbExcel::sheetInfo('orders.xlsx', 'Orders', [
+    'accurate_row_count' => true,
+]);
+
+print_r([
+    'filled_rows' => $sheet['filled_rows'],
+    'physical_rows' => $sheet['physical_rows'],
+    'last_row' => $sheet['last_row'],
+    'columns' => $sheet['columns'],
+    'cells' => $sheet['cells'],
+    'scan_mode' => $sheet['scan_mode'],
+]);
+```
+
+Use `rowCount()` for a single number:
+
+```php
+$filledRows = MnbExcel::rowCount('orders.xlsx', 'Orders');
+$physicalRows = MnbExcel::rowCount('orders.xlsx', 'Orders', ['mode' => 'physical']);
+$lastUsedRow = MnbExcel::rowCount('orders.xlsx', 'Orders', ['mode' => 'last_row']);
+$declaredLastRow = MnbExcel::rowCount('orders.xlsx', 'Orders', ['mode' => 'declared']);
+
+$allSheets = MnbExcel::rowCounts('orders.xlsx');
+```
+
+Row-count modes:
+
+| Mode | Meaning |
+|---|---|
+| `filled` | Rows containing at least one cell; default |
+| `physical` | Physical `<row>` elements, including empty styled rows |
+| `last_row` | Highest row index referenced by worksheet XML |
+| `declared` | Last row from the worksheet `<dimension>`; fastest, but may include stale formatting |
+
+The equivalent methods are also available on `Mnb\PHPExcel\Format\Xlsx`. Native `ext-xmlreader` is used for true low-memory scanning. The pure-PHP fallback remains functional but may buffer worksheet XML.
+
 ## Large Excel Preflight and Method Advisor
 
 MNB PHPExcel keeps the existing rich reader/writer for small and normal Excel files. For large imports, use the preflight/advisor layer first so the application does not load a huge workbook into PHP arrays.

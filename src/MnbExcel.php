@@ -44,6 +44,7 @@ use Mnb\PHPExcel\Contracts\ReaderPluginInterface;
 use Mnb\PHPExcel\Reader\XmlReader;
 use Mnb\PHPExcel\Reader\XlsxReader;
 use Mnb\PHPExcel\Reader\XlsxInspector;
+use Mnb\PHPExcel\Reader\XlsxQuickInfo;
 use Mnb\PHPExcel\Events\EventDispatcher;
 use Mnb\PHPExcel\Format\Xlsx;
 use Mnb\PHPExcel\Domain\DomainImportPreset;
@@ -973,6 +974,65 @@ final class MnbExcel
     public static function sheetNames(string $path, array $options = []): array
     {
         return (new XlsxInspector())->sheetNames($path, $options);
+    }
+
+    /**
+     * Return XLSX file/package information without loading workbook cell rows.
+     *
+     * @param array<string,mixed> $options password
+     * @return array<string,mixed>
+     */
+    public static function fileInfo(string $path, array $options = []): array
+    {
+        return (new XlsxQuickInfo())->fileInfo($path, $options);
+    }
+
+    /**
+     * Return information for every XLSX worksheet without loading cell values.
+     *
+     * Set accurate_row_count=true to stream worksheet XML and calculate exact
+     * physical/filled row counts.
+     *
+     * @param array<string,mixed> $options password, accurate_row_count, include_hidden
+     * @return list<array<string,mixed>>
+     */
+    public static function sheetsInfo(string $path, array $options = []): array
+    {
+        return (new XlsxQuickInfo())->sheetsInfo($path, $options);
+    }
+
+    /**
+     * Return one XLSX worksheet's information without loading cell values.
+     *
+     * @param array<string,mixed> $options password, accurate_row_count
+     * @return array<string,mixed>
+     */
+    public static function sheetInfo(string $path, int|string $sheet = 1, array $options = []): array
+    {
+        return (new XlsxQuickInfo())->sheetInfo($path, $sheet, $options);
+    }
+
+    /**
+     * Count rows in one XLSX worksheet without converting rows to PHP arrays.
+     *
+     * mode may be filled, physical, last_row, or declared.
+     *
+     * @param array<string,mixed> $options password, mode
+     */
+    public static function rowCount(string $path, int|string $sheet = 1, array $options = []): int
+    {
+        return (new XlsxQuickInfo())->rowCount($path, $sheet, $options);
+    }
+
+    /**
+     * Count rows for all XLSX worksheets without converting rows to PHP arrays.
+     *
+     * @param array<string,mixed> $options password, mode, include_hidden
+     * @return array<string,int>
+     */
+    public static function rowCounts(string $path, array $options = []): array
+    {
+        return (new XlsxQuickInfo())->rowCounts($path, $options);
     }
 
     /**

@@ -109,6 +109,7 @@ return [
             'src/Reader/SharedStrings/*.php',
             'src/Reader/XlsxImageExtractor.php',
             'src/Reader/XlsxInspector.php',
+            'src/Reader/XlsxQuickInfo.php',
             'src/Reader/XlsxMetadataExtractor.php',
             'src/Reader/XlsxProtectionReader.php',
             'src/Reader/XlsxReader.php',

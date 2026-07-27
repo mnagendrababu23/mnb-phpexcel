@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Lightweight XLSX package-information APIs that do not hydrate worksheet rows: `MnbExcel::fileInfo()`, `sheetsInfo()`, `sheetInfo()`, `rowCount()`, and `rowCounts()`.
+- Fast worksheet dimension inspection plus optional streamed XML counting for filled rows, physical rows, cells, and last-used row/column.
+- Matching `Mnb\PHPExcel\Format\Xlsx` facade methods and standalone metadata/count examples.
+
+### Notes
+
+- `rowCount()` defaults to filled rows. Use `mode => physical`, `last_row`, or `declared` when those workbook semantics are more appropriate.
+- Native `ext-xmlreader` provides the true streaming path; the secure fallback remains functional but may buffer worksheet XML.
+
 ## 1.7.0 — Password-Encrypted XLSX and Document Protection
 
 ### Added

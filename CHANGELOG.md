@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Fixed
+
+- Fixed native `XMLReader` initialization in the monolithic package: `open()` and `XML()` now leave the reader unpositioned until `read()`, preventing XAMPP/libxml from throwing `Failed to read property due to libxml error`.
+- Reset the XML adapter public state at end-of-stream and guard native property synchronization.
+
 ### Added
 
 - Lightweight XLSX package-information APIs that do not hydrate worksheet rows: `MnbExcel::fileInfo()`, `sheetsInfo()`, `sheetInfo()`, `rowCount()`, and `rowCounts()`.

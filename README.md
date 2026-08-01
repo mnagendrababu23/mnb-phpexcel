@@ -1,7 +1,13 @@
 # MNB PHPExcel
 
 **MNB PHPExcel** is an **application-ready PHP Excel engine** with a rich small/normal workbook mode plus separate streaming modes for large XLSX import and export.
+
 Documentation URL: https://mnbphpexcel.space/
+## MNB PHPExcel Assistant
+
+Generate MNB PHPExcel code using our dedicated ChatGPT assistant:
+
+[Open MNB PHPExcel AI Assistant](https://chatgpt.com/g/g-6a6e31d80350819194b68853d41c1561-mnb-phpexcel-assistant)
 ```text
 PHP Array ⇄ XLSX ⇄ CSV ⇄ JSON ⇄ XML ⇄ SQL
 ```

@@ -1,13 +1,7 @@
 # MNB PHPExcel
 
 **MNB PHPExcel** is an **application-ready PHP Excel engine** with a rich small/normal workbook mode plus separate streaming modes for large XLSX import and export.
-
 Documentation URL: https://mnbphpexcel.space/
-## MNB PHPExcel Assistant
-
-Generate MNB PHPExcel code using our dedicated ChatGPT assistant:
-
-[Open MNB PHPExcel AI Assistant](https://chatgpt.com/g/g-6a6e31d80350819194b68853d41c1561-mnb-phpexcel-assistant)
 ```text
 PHP Array ⇄ XLSX ⇄ CSV ⇄ JSON ⇄ XML ⇄ SQL
 ```
@@ -19,6 +13,22 @@ v1.7.0 — Password-Encrypted XLSX and Document Protection
 ```
 
 This package keeps the rich workbook reader/writer optimized for **small and normal files**. Large XLSX files are handled through separate **preflight/advisor + streaming import/export** layers so applications do not load huge workbooks into PHP arrays.
+
+## Unified workbook metadata
+
+```php
+$report = MnbExcel::metaInfo('report.xlsx', ['profile' => 'full']);
+
+MnbExcel::updateMetaInfo('report.xlsx', 'report-updated.xlsx', [
+    'document' => ['title' => 'Annual Report'],
+    'custom_properties' => ['Project ID' => 'PRJ-1001'],
+]);
+
+MnbExcel::removePersonalInfo('report-updated.xlsx', 'report-clean.xlsx');
+```
+
+The versioned metadata schema reports document/revision/application properties, workbook sheets, hidden content, security, macros, named objects, links, comments, embedded objects, calculations, print settings, validations, pivots and package/container details. Profiles are `quick`, `standard`, `full`, and `forensic`. XLSX and native XLS provide format-aware collectors plus atomic metadata updates; CSV provides encoding, dialect, structure, statistics, and formula-injection risk analysis while workbook-only sections are explicitly marked `not_applicable`. See [`docs/UNIFIED_METADATA.md`](docs/UNIFIED_METADATA.md).
+
 
 ## Install
 

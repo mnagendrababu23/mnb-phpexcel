@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+### Metadata
+
+- Unified metadata schema `1.0` through `MnbExcel::metaInfo()`, `Xlsx::metaInfo()`, and `ReadSession::metaInfo()`.
+- Quick, standard, full, and forensic metadata profiles with explicit section capability states.
+- Native XLSX metadata inventory for document/revision/application/custom properties, workbook structure, security, macros, named objects, links, hidden content, comments, embedded objects, calculations, print settings, validation, pivots, and package XML.
+- Atomic XLSX metadata updates and personal-information cleanup through `updateMetaInfo()` and `removePersonalInfo()`.
+- Native CSV metadata for encoding/BOM, delimiter dialect, line endings, row/column statistics, ragged rows, header heuristics, and formula-injection risk.
+- Native OLE/BIFF8 XLS metadata for property sets, custom properties, workbook/sheet structure, security, macros, named objects, links, hidden content, comments, embedded objects, calculation, print, validation, pivot, and compound-container inventories.
+- Atomic XLS metadata updates for document, revision, application, custom-property, workbook, and calculation settings, including personal-information cleanup and unknown-stream preservation.
+- Regression coverage for XLSX and XLS metadata round trips, encrypted/locked input handling, unknown-part or stream preservation, arbitrary namespace prefixes, CSV dialect edge cases, and generic facade routing.
+- Fixed generic Mono routing for encrypted XLSX metadata reads, updates, and personal-information cleanup.
+- Hardened OOXML property registration, custom-property preservation, metadata type validation, and quick-profile accuracy.
+
 ### Fixed
 
 - Fixed native `XMLReader` initialization in the monolithic package: `open()` and `XML()` now leave the reader unpositioned until `read()`, preventing XAMPP/libxml from throwing `Failed to read property due to libxml error`.

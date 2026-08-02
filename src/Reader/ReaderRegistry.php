@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Mnb\PHPExcel\Reader;
 
-use Mnb\PHPExcel\Compatibility\XlsReader;
+use Mnb\PHPExcel\Reader\XlsReader;
 use Mnb\PHPExcel\Contracts\ReaderPluginInterface;
 use Mnb\PHPExcel\Reader\Plugin\PluginReaderAdapter;
 use Mnb\PHPExcel\Support\ErrorCode;

@@ -9,8 +9,19 @@ use Mnb\PHPExcel\Support\EncodingDetector;
 use Mnb\PHPExcel\Support\ErrorCode;
 use Mnb\PHPExcel\Support\MnbExcelException;
 
-final class CsvReader implements IterableReaderInterface
+final class CsvReader implements IterableReaderInterface, FormatAwareReaderInterface, MetadataReaderInterface
 {
+    public function format(): string
+    {
+        return 'csv';
+    }
+
+    /** @param array<string,mixed> $options @return array<string,mixed> */
+    public function metaInfo(string $path, array $options = []): array
+    {
+        return (new CsvMetadataReader())->metaInfo($path, $options);
+    }
+
     /** @return list<list<mixed>> */
     public function readSheet(string $path, int|string $sheet = 1, array $options = []): array
     {

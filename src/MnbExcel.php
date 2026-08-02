@@ -39,7 +39,7 @@ use Mnb\PHPExcel\Reader\ReadSession;
 use Mnb\PHPExcel\Reader\ReaderRegistry;
 use Mnb\PHPExcel\Reader\Options\ReaderOptions;
 use Mnb\PHPExcel\Reader\OdsReader;
-use Mnb\PHPExcel\Compatibility\XlsReader;
+use Mnb\PHPExcel\Reader\XlsReader;
 use Mnb\PHPExcel\Contracts\ReaderPluginInterface;
 use Mnb\PHPExcel\Reader\XmlReader;
 use Mnb\PHPExcel\Reader\XlsxReader;
@@ -47,6 +47,8 @@ use Mnb\PHPExcel\Reader\XlsxInspector;
 use Mnb\PHPExcel\Reader\XlsxQuickInfo;
 use Mnb\PHPExcel\Events\EventDispatcher;
 use Mnb\PHPExcel\Format\Xlsx;
+use Mnb\PHPExcel\Format\Xls;
+use Mnb\PHPExcel\Format\Csv;
 use Mnb\PHPExcel\Domain\DomainImportPreset;
 use Mnb\PHPExcel\Domain\DomainImportRegistry;
 use Mnb\PHPExcel\Domain\DomainImportType;
@@ -436,7 +438,7 @@ final class MnbExcel
         return new ReadSession($path, new OdsReader(), $options);
     }
 
-    /** Optional legacy XLS adapter; requires phpoffice/phpspreadsheet. */
+    /** Read a legacy BIFF8 XLS workbook using the native engine. */
     public static function readXls(string $path, array|ReaderOptions $options = []): ReadSession
     {
         return new ReadSession($path, new XlsReader(), $options);
@@ -995,7 +997,7 @@ final class MnbExcel
 
     /**
      * Atomically update metadata in a supported workbook.
-     * XLSX is implemented in this milestone; XLS support will use the same API.
+     * XLSX and XLS metadata updates are implemented. CSV has no embedded metadata store.
      *
      * @param array<string,mixed> $changes
      * @param array<string,mixed> $options
@@ -1003,28 +1005,42 @@ final class MnbExcel
     public static function updateMetaInfo(string $source, string $destination, array $changes, array $options = []): void
     {
         $format = self::isEncryptedOoxml($source) ? 'xlsx' : FileFormatDetector::detect($source, $options);
-        if ($format !== 'xlsx') {
-            throw MnbExcelException::withCode(
-                'Metadata updates are currently implemented for XLSX only.',
-                ErrorCode::UNSUPPORTED_FORMAT,
-                ['format' => $format, 'path' => $source]
-            );
+        if ($format === 'xlsx') {
+            Xlsx::updateMetaInfo($source, $destination, $changes, $options);
+            return;
         }
-        Xlsx::updateMetaInfo($source, $destination, $changes, $options);
+        if ($format === 'xls') {
+            Xls::updateMetaInfo($source, $destination, $changes, $options);
+            return;
+        }
+        throw MnbExcelException::withCode(
+            $format === 'csv'
+                ? 'CSV files do not contain an embedded metadata property store.'
+                : 'Metadata updates are not implemented for this format.',
+            ErrorCode::UNSUPPORTED_FORMAT,
+            ['format' => $format, 'path' => $source]
+        );
     }
 
     /** @param array<string,mixed> $options */
     public static function removePersonalInfo(string $source, string $destination, array $options = []): void
     {
         $format = self::isEncryptedOoxml($source) ? 'xlsx' : FileFormatDetector::detect($source, $options);
-        if ($format !== 'xlsx') {
-            throw MnbExcelException::withCode(
-                'Personal-information removal is currently implemented for XLSX only.',
-                ErrorCode::UNSUPPORTED_FORMAT,
-                ['format' => $format, 'path' => $source]
-            );
+        if ($format === 'xlsx') {
+            Xlsx::removePersonalInfo($source, $destination, $options);
+            return;
         }
-        Xlsx::removePersonalInfo($source, $destination, $options);
+        if ($format === 'xls') {
+            Xls::removePersonalInfo($source, $destination, $options);
+            return;
+        }
+        throw MnbExcelException::withCode(
+            $format === 'csv'
+                ? 'CSV files do not contain embedded author or custom-property metadata.'
+                : 'Personal-information removal is not implemented for this format.',
+            ErrorCode::UNSUPPORTED_FORMAT,
+            ['format' => $format, 'path' => $source]
+        );
     }
 
     private static function isEncryptedOoxml(string $path): bool

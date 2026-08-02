@@ -7,6 +7,8 @@ The unified metadata module provides one versioned response schema for every rea
 ```php
 use Mnb\PHPExcel\MnbExcel;
 use Mnb\PHPExcel\Format\Xlsx;
+use Mnb\PHPExcel\Format\Xls;
+use Mnb\PHPExcel\Format\Csv;
 
 $report = MnbExcel::metaInfo('report.xlsx', [
     'profile' => 'standard',
@@ -21,6 +23,9 @@ $report = Xlsx::read('report.xlsx')->metaInfo([
     'profile' => 'forensic',
     'include_hash' => true,
 ]);
+
+$xlsReport = Xls::metaInfo('legacy.xls', ['profile' => 'full']);
+$csvReport = Csv::metaInfo('data.csv', ['profile' => 'full']);
 ```
 
 The top-level schema is versioned independently from the package version:
@@ -156,7 +161,7 @@ The decrypted package exists only in a temporary file and is removed in a `final
 
 ## Update metadata
 
-XLSX metadata updates are atomic and preserve unknown package parts byte-for-byte:
+XLSX and XLS metadata updates are atomic. XLSX preserves unknown package parts byte-for-byte; XLS preserves unknown OLE streams and unmodified BIFF records byte-for-byte:
 
 ```php
 MnbExcel::updateMetaInfo('source.xlsx', 'updated.xlsx', [
@@ -253,11 +258,19 @@ MnbExcel::removePersonalInfo('source.xlsx', 'clean.xlsx', [
 
 This removes creator, last-saved-by, manager, company and custom properties, and anonymizes legacy comment authors and threaded-comment persons. Set `remove_descriptive_properties` to also remove title, subject, keywords, description and category.
 
+## XLS metadata updates
+
+`Xls::updateMetaInfo()` and the generic `MnbExcel::updateMetaInfo()` route support document, revision, application, typed custom properties, active sheet, sheet visibility, date system, and BIFF calculation settings. Unknown OLE streams and unchanged BIFF records are preserved. Password-encrypted BIFF updates are not available because native BIFF decryption is not implemented. Digital-signature streams block updates unless invalidation is explicitly allowed.
+
+## CSV metadata
+
+CSV reports encoding, BOM, dialect, line endings, CSV/TSV variant, row and cell statistics, ragged rows, header confidence, and formula-like-cell risk. Workbook-only sections return `not_applicable`. CSV does not have a standardized embedded metadata property store, so metadata updates are not applicable.
+
 ## Format status
 
 - **XLSX:** rich native reader and atomic writer are implemented.
-- **CSV:** receives the shared schema envelope through `ReadSession::metaInfo()`. File and synthetic single-sheet information are available; format-specific encoding/dialect statistics are the next collector milestone.
-- **XLS:** receives the same shared schema envelope through the core session. Native BIFF/OLE property and feature collectors are the next collector milestone.
+- **XLS:** native OLE/BIFF8 reader and atomic metadata writer are implemented; complex object inventories clearly report `partial` where semantic decoding is incomplete.
+- **CSV:** native encoding/dialect/statistical/security metadata is implemented; embedded-property writes are not applicable to the format.
 - **Other formats:** receive the shared envelope and explicit `not_supported` states until their own collectors implement `MetadataReaderInterface`.
 
 The shared schema prevents format modules from inventing incompatible return structures while allowing each format to progress independently.

@@ -117,9 +117,10 @@ smoke_run('returns the shared metadata envelope for CSV', static function (): vo
     smoke_assert_equals('1.0', $metadata['schema_version'], 'CSV should use metadata schema 1.0');
     smoke_assert_equals('csv', $metadata['format'], 'CSV format should be reported');
     smoke_assert_equals('available', $metadata['file']['state'], 'CSV file metadata should be available');
-    smoke_assert_equals('partial', $metadata['workbook']['state'], 'CSV should expose a synthetic workbook section');
+    smoke_assert_equals('available', $metadata['workbook']['state'], 'CSV should expose a real synthetic workbook section');
     smoke_assert_equals(1, $metadata['workbook']['sheet_count'], 'CSV should expose one synthetic worksheet');
-    smoke_assert_equals('not_supported', $metadata['document']['state'], 'CSV document properties should not be fabricated');
+    smoke_assert_equals(',', $metadata['format_details']['delimiter'], 'CSV delimiter metadata should be detected');
+    smoke_assert_equals('not_applicable', $metadata['document']['state'], 'CSV document properties should not be fabricated');
     smoke_assert_true(is_string($metadata['file']['sha256']) && strlen($metadata['file']['sha256']) === 64, 'CSV hash should be available on request');
 });
 

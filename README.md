@@ -27,7 +27,7 @@ MnbExcel::updateMetaInfo('report.xlsx', 'report-updated.xlsx', [
 MnbExcel::removePersonalInfo('report-updated.xlsx', 'report-clean.xlsx');
 ```
 
-The versioned metadata schema reports document/revision/application properties, workbook sheets, hidden content, security, macros, named objects, links, comments, embedded objects, calculations, print settings, validations, pivots and package XML. Profiles are `quick`, `standard`, `full`, and `forensic`. XLSX has the complete native collector and atomic metadata writer in this milestone; CSV and XLS already receive the shared envelope and will gain their format-specific collectors next. See [`docs/UNIFIED_METADATA.md`](docs/UNIFIED_METADATA.md).
+The versioned metadata schema reports document/revision/application properties, workbook sheets, hidden content, security, macros, named objects, links, comments, embedded objects, calculations, print settings, validations, pivots and package/container details. Profiles are `quick`, `standard`, `full`, and `forensic`. XLSX and native XLS provide format-aware collectors plus atomic metadata updates; CSV provides encoding, dialect, structure, statistics, and formula-injection risk analysis while workbook-only sections are explicitly marked `not_applicable`. See [`docs/UNIFIED_METADATA.md`](docs/UNIFIED_METADATA.md).
 
 
 ## Install

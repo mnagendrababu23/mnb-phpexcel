@@ -62,6 +62,7 @@ use Mnb\PHPExcel\Large\LargePdoCursor;
 use Mnb\PHPExcel\Plugin\MnbExcelPluginInterface;
 use Mnb\PHPExcel\Plugin\PluginManager;
 use Mnb\PHPExcel\Security\CellSafetyScanner;
+use Mnb\PHPExcel\Security\XlsxEncryption;
 use Mnb\PHPExcel\Support\DatabaseConfigResolver;
 use Mnb\PHPExcel\Support\DatabaseConnectionFactory;
 use Mnb\PHPExcel\Support\EncodingDetector;
@@ -974,6 +975,66 @@ final class MnbExcel
     public static function sheetNames(string $path, array $options = []): array
     {
         return (new XlsxInspector())->sheetNames($path, $options);
+    }
+
+    /**
+     * Return normalized metadata for any supported spreadsheet format.
+     * Rich format packages implement the shared metadata collector contract;
+     * other formats return the common safe fallback until their collector lands.
+     *
+     * @param array<string,mixed> $options
+     * @return array<string,mixed>
+     */
+    public static function metaInfo(string $path, array $options = []): array
+    {
+        if (self::isEncryptedOoxml($path)) {
+            return Xlsx::metaInfo($path, $options);
+        }
+        return self::read($path)->metaInfo($options);
+    }
+
+    /**
+     * Atomically update metadata in a supported workbook.
+     * XLSX is implemented in this milestone; XLS support will use the same API.
+     *
+     * @param array<string,mixed> $changes
+     * @param array<string,mixed> $options
+     */
+    public static function updateMetaInfo(string $source, string $destination, array $changes, array $options = []): void
+    {
+        $format = self::isEncryptedOoxml($source) ? 'xlsx' : FileFormatDetector::detect($source, $options);
+        if ($format !== 'xlsx') {
+            throw MnbExcelException::withCode(
+                'Metadata updates are currently implemented for XLSX only.',
+                ErrorCode::UNSUPPORTED_FORMAT,
+                ['format' => $format, 'path' => $source]
+            );
+        }
+        Xlsx::updateMetaInfo($source, $destination, $changes, $options);
+    }
+
+    /** @param array<string,mixed> $options */
+    public static function removePersonalInfo(string $source, string $destination, array $options = []): void
+    {
+        $format = self::isEncryptedOoxml($source) ? 'xlsx' : FileFormatDetector::detect($source, $options);
+        if ($format !== 'xlsx') {
+            throw MnbExcelException::withCode(
+                'Personal-information removal is currently implemented for XLSX only.',
+                ErrorCode::UNSUPPORTED_FORMAT,
+                ['format' => $format, 'path' => $source]
+            );
+        }
+        Xlsx::removePersonalInfo($source, $destination, $options);
+    }
+
+    private static function isEncryptedOoxml(string $path): bool
+    {
+        $extension = strtolower((string) pathinfo($path, PATHINFO_EXTENSION));
+        if (!in_array($extension, ['xlsx', 'xlsm', 'xltx', 'xltm'], true) || !is_file($path)) {
+            return false;
+        }
+
+        return (new XlsxEncryption())->isEncryptedFile($path);
     }
 
     /**

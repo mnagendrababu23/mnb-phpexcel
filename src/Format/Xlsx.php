@@ -12,7 +12,9 @@ use Mnb\PHPExcel\Reader\Options\ReaderOptions;
 use Mnb\PHPExcel\Reader\ReadSession;
 use Mnb\PHPExcel\Reader\XlsxReader;
 use Mnb\PHPExcel\Reader\XlsxQuickInfo;
+use Mnb\PHPExcel\Reader\XlsxMetadataReader;
 use Mnb\PHPExcel\Writer\XlsxWriter;
+use Mnb\PHPExcel\Writer\XlsxMetadataWriter;
 use Mnb\PHPExcel\Security\XlsxEncryption;
 
 final class Xlsx
@@ -48,6 +50,24 @@ final class Xlsx
     public static function images(string $path, int|string $sheet = 1, bool $includeBytes = false, array|ReaderOptions $options = []): array
     {
         return self::read($path, $options)->sheet($sheet)->images($includeBytes);
+    }
+
+    /** @param array<string,mixed> $options @return array<string,mixed> */
+    public static function metaInfo(string $path, array $options = []): array
+    {
+        return (new XlsxMetadataReader())->metaInfo($path, $options);
+    }
+
+    /** @param array<string,mixed> $changes @param array<string,mixed> $options */
+    public static function updateMetaInfo(string $source, string $destination, array $changes, array $options = []): void
+    {
+        (new XlsxMetadataWriter())->updateMetaInfo($source, $destination, $changes, $options);
+    }
+
+    /** @param array<string,mixed> $options */
+    public static function removePersonalInfo(string $source, string $destination, array $options = []): void
+    {
+        (new XlsxMetadataWriter())->removePersonalInfo($source, $destination, $options);
     }
 
     /** @param array<string,mixed> $options @return array<string,mixed> */

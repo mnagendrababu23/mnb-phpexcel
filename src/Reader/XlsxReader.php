@@ -20,13 +20,19 @@ use Mnb\PHPExcel\Support\Xml\XmlReader;
 use Mnb\PHPExcel\Support\Zip\ZipArchive;
 use Mnb\PHPExcel\Security\XlsxEncryption;
 
-final class XlsxReader implements IterableReaderInterface
+final class XlsxReader implements IterableReaderInterface, MetadataReaderInterface
 {
     private XlsxWorkbookResolver $resolver;
 
     public function __construct(?XlsxWorkbookResolver $resolver = null)
     {
         $this->resolver = $resolver ?? new XlsxWorkbookResolver();
+    }
+
+    /** @param array<string,mixed> $options @return array<string,mixed> */
+    public function metaInfo(string $path, array $options = []): array
+    {
+        return (new XlsxMetadataReader($this->resolver))->metaInfo($path, $options);
     }
 
     /** @return list<list<mixed>> */

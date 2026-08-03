@@ -21,6 +21,7 @@ use Mnb\PHPExcel\Reader\State\CellSnapshot;
 use Mnb\PHPExcel\Reader\State\HeaderDetection;
 use Mnb\PHPExcel\Reader\State\ReadProgress;
 use Mnb\PHPExcel\Reader\State\RowState;
+use Mnb\PHPExcel\Snapshot\VisualSnapshotReaderInterface;
 use Throwable;
 use Mnb\PHPExcel\Writer\JsonWriter;
 use Mnb\PHPExcel\Writer\XmlWriter;
@@ -336,6 +337,21 @@ final class ReadSession
         return $report->toArray();
     }
 
+
+    /**
+     * Return a portable content, style, and worksheet-layout snapshot.
+     *
+     * @param array<string,mixed> $options
+     * @return array<string,mixed>
+     */
+    public function visualSnapshot(array $options = []): array
+    {
+        if (!$this->reader instanceof VisualSnapshotReaderInterface) {
+            throw new MnbExcelException('Visual snapshots are not supported by the selected reader.');
+        }
+
+        return $this->reader->visualSnapshot($this->path, array_replace($this->defaultOptions, $options));
+    }
 
     /** Return file, workbook, and selected worksheet protection metadata. */
     public function protection(): array

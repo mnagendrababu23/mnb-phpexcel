@@ -996,6 +996,58 @@ final class MnbExcel
     }
 
     /**
+     * Capture a portable sparse workbook snapshot containing values, formulas,
+     * styles, dimensions, panes, filters, validations, conditional formatting,
+     * comments, links, and the format capability report.
+     *
+     * @param array<string,mixed> $options
+     * @return array<string,mixed>
+     */
+    public static function visualSnapshot(string $path, array $options = []): array
+    {
+        $format = self::isEncryptedOoxml($path) ? 'xlsx' : FileFormatDetector::detect($path, $options);
+
+        return match ($format) {
+            'xlsx' => Xlsx::visualSnapshot($path, $options),
+            'xls' => Xls::visualSnapshot($path, $options),
+            'csv' => Csv::visualSnapshot($path, $options),
+            default => throw MnbExcelException::withCode(
+                'Visual snapshots are not implemented for this format.',
+                ErrorCode::UNSUPPORTED_FORMAT,
+                ['format' => $format, 'path' => $path]
+            ),
+        };
+    }
+
+    /**
+     * Recreate an XLSX, XLS, CSV, or TSV file from a visual snapshot.
+     *
+     * @param array<string,mixed>|string $snapshot Snapshot array or JSON document.
+     * @param array<string,mixed> $options
+     */
+    public static function createFromVisualSnapshot(array|string $snapshot, string $path, array $options = []): void
+    {
+        $format = strtolower(trim((string) ($options['format'] ?? pathinfo($path, PATHINFO_EXTENSION))));
+        $format = match ($format) {
+            'xlsm', 'xltx', 'xltm' => 'xlsx',
+            'tsv', 'txt' => 'csv',
+            'xlt' => 'xls',
+            default => $format,
+        };
+
+        match ($format) {
+            'xlsx' => Xlsx::createFromVisualSnapshot($snapshot, $path, $options),
+            'xls' => Xls::createFromVisualSnapshot($snapshot, $path, $options),
+            'csv' => Csv::createFromVisualSnapshot($snapshot, $path, $options),
+            default => throw MnbExcelException::withCode(
+                'Unable to determine a supported destination format for the visual snapshot.',
+                ErrorCode::UNSUPPORTED_FORMAT,
+                ['format' => $format, 'path' => $path]
+            ),
+        };
+    }
+
+    /**
      * Atomically update metadata in a supported workbook.
      * XLSX and XLS metadata updates are implemented. CSV has no embedded metadata store.
      *

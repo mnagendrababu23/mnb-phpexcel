@@ -38,6 +38,9 @@ final class WorkbookBuilder
     /** @var array<string, string> */
     private array $dateColumns = [];
 
+    /** @var array<int|string, string> Excel number formats for columns written as true date cells. */
+    private array $typedDateColumns = [];
+
     /** @var list<string> */
     private array $numberColumns = [];
 
@@ -955,6 +958,7 @@ final class WorkbookBuilder
     public function dateStyleColumns(array $columns, string $format = 'yyyy-mm-dd'): self
     {
         foreach ($columns as $column) {
+            $this->typedDateColumns[$column] = $format;
             $this->columnStyle($column, [
                 'format' => $format,
                 'alignment' => ['horizontal' => 'left'],
@@ -968,6 +972,7 @@ final class WorkbookBuilder
     public function datetimeStyleColumns(array $columns, string $format = 'yyyy-mm-dd hh:mm:ss'): self
     {
         foreach ($columns as $column) {
+            $this->typedDateColumns[$column] = $format;
             $this->columnStyle($column, [
                 'format' => $format,
                 'alignment' => ['horizontal' => 'left'],
@@ -1584,14 +1589,20 @@ final class WorkbookBuilder
             /** @var array<int|string,mixed> $row */
             if (Arr::isAssoc($row)) {
                 $normalized = [];
+                $columnIndex = 1;
                 foreach ($row as $key => $value) {
-                    $normalized[(string) $key] = $this->normalizeValue($value, (string) $key);
+                    $normalized[(string) $key] = $this->normalizeValue(
+                        $value,
+                        (string) $key,
+                        $columnIndex
+                    );
+                    $columnIndex++;
                 }
                 $rows[] = $normalized;
             } else {
                 $normalized = [];
                 foreach (array_values($row) as $index => $value) {
-                    $normalized[] = $this->normalizeValue($value, (string) $index);
+                    $normalized[] = $this->normalizeValue($value, (string) $index, $index + 1);
                 }
                 $rows[] = $normalized;
             }
@@ -1783,8 +1794,8 @@ final class WorkbookBuilder
             /** @var array<int|string, mixed> $row */
             if ($isAssoc) {
                 $normalized = [];
-                foreach ($keys as $key) {
-                    $normalized[] = $this->normalizeValue($row[$key] ?? null, (string) $key);
+                foreach ($keys as $columnOffset => $key) {
+                    $normalized[] = $this->normalizeValue($row[$key] ?? null, (string) $key, $columnOffset + 1);
                 }
                 $rows[] = $normalized;
                 continue;
@@ -1792,7 +1803,7 @@ final class WorkbookBuilder
 
             $normalized = [];
             foreach (array_values($row) as $i => $value) {
-                $normalized[] = $this->normalizeValue($value, (string) $i);
+                $normalized[] = $this->normalizeValue($value, (string) $i, $i + 1);
             }
             $rows[] = $normalized;
         }
@@ -1810,7 +1821,7 @@ final class WorkbookBuilder
         return Arr::isAssoc($first) ? array_keys($first) : [];
     }
 
-    private function normalizeValue(mixed $value, string $columnKey): mixed
+    private function normalizeValue(mixed $value, string $columnKey, int $columnIndex): mixed
     {
         if (is_array($value) && array_key_exists('type', $value) && (array_key_exists('value', $value) || array_key_exists('formula', $value))) {
             $value = CellValue::fromArray($value);
@@ -1818,6 +1829,22 @@ final class WorkbookBuilder
 
         if ($value instanceof CellValue) {
             return $this->normalizeCellValue($value);
+        }
+
+        $typedDateFormat = $this->typedDateFormatForColumn($columnKey, $columnIndex);
+        if ($typedDateFormat !== null && $value !== null && $value !== '') {
+            try {
+                $date = $value instanceof \DateTimeInterface
+                    ? \DateTimeImmutable::createFromInterface($value)
+                    : new \DateTimeImmutable((string) $value);
+            } catch (\Throwable $exception) {
+                throw new MnbExcelException(
+                    sprintf('Invalid date value for column "%s": %s', $columnKey, (string) $value),
+                    previous: $exception
+                );
+            }
+
+            return CellValue::date($date, ['format' => $typedDateFormat]);
         }
 
         if ($this->escapeFormulaLikeText) {
@@ -1849,6 +1876,26 @@ final class WorkbookBuilder
 
         $normalized = ValueSanitizer::normalizeScalar($value);
         return is_string($normalized) ? $this->sanitizeText($normalized) : $normalized;
+    }
+
+
+    private function typedDateFormatForColumn(string $columnKey, int $columnIndex): ?string
+    {
+        if (isset($this->typedDateColumns[$columnKey])) {
+            return $this->typedDateColumns[$columnKey];
+        }
+        if (isset($this->typedDateColumns[$columnIndex])) {
+            return $this->typedDateColumns[$columnIndex];
+        }
+
+        $columnLetter = Coordinate::columnIndexToName($columnIndex);
+        foreach ([$columnLetter, strtolower($columnLetter)] as $candidate) {
+            if (isset($this->typedDateColumns[$candidate])) {
+                return $this->typedDateColumns[$candidate];
+            }
+        }
+
+        return null;
     }
 
     private function normalizeCellValue(CellValue $cell): CellValue

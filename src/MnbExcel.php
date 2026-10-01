@@ -33,6 +33,7 @@ use Mnb\PHPExcel\Application\Http\HttpResponse;
 use Mnb\PHPExcel\Application\Http\SpreadsheetHttpEndpoint;
 use Mnb\PHPExcel\Core\CellValue;
 use Mnb\PHPExcel\Core\WorkbookBuilder;
+use Mnb\PHPExcel\Developer\SpreadsheetDraft;
 use Mnb\PHPExcel\Reader\CsvReader;
 use Mnb\PHPExcel\Reader\JsonReader;
 use Mnb\PHPExcel\Reader\ReadSession;
@@ -93,6 +94,28 @@ final class MnbExcel
 
     private static ?ReaderRegistry $readerRegistry = null;
     private static ?DomainImportRegistry $domainImportRegistry = null;
+
+    /** Open XLSX/XLS/CSV/JSON/XML/ODS with automatic format detection. */
+    public static function open(string $path, array|ReaderOptions $options = []): ReadSession
+    {
+        return self::read($path, $options);
+    }
+
+    /** Start a simple fluent workbook. Output format is selected by save() extension. */
+    public static function create(): SpreadsheetDraft
+    {
+        return new SpreadsheetDraft();
+    }
+
+    /** Convert a supported spreadsheet to another supported format.
+     * For very large files prefer rows()/largeRead() to retain streaming behavior.
+     */
+    public static function convert(string $source, string $target, array|ReaderOptions $options = []): string
+    {
+        $session = self::open($source, $options);
+        $rows = $session->toArray();
+        return WorkbookBuilder::fromArray($rows)->save($target);
+    }
 
     public static function version(): string
     {

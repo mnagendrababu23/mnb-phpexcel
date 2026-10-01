@@ -126,6 +126,20 @@ final class ReadSession
         return $this->withOptions(ReaderOptions::defaults()->withRange($startRow, $endRow, $startColumn, $endColumn));
     }
 
+    /** Developer-friendly alias for projectColumns().
+     * @param list<int|string> $columns
+     */
+    public function columns(array $columns, bool $compact = true): self
+    {
+        return $this->projectColumns($columns, $compact);
+    }
+
+    /** Developer-friendly header mapping using the first normalized data row. */
+    public function withHeaders(int $row = 1): self
+    {
+        return $this->withHeaderRow($row);
+    }
+
     /** @param list<int|string> $columns */
     public function projectColumns(array $columns, bool $compact = true): self
     {
@@ -754,6 +768,16 @@ final class ReadSession
      * @param array<string,mixed> $options
      * @return array{rows:int,stopped:bool}
      */
+    /** Developer-friendly alias for eachRow().
+     * @param callable(array<string,mixed>|list<mixed>,int): (bool|void) $callback
+     * @param array<string,mixed> $options
+     * @return array{rows:int,stopped:bool}
+     */
+    public function each(callable $callback, array $options = []): array
+    {
+        return $this->eachRow($callback, $options);
+    }
+
     public function eachRow(callable $callback, array $options = []): array
     {
         $count = 0;

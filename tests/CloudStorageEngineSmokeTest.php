@@ -14,5 +14,6 @@ $copy=$dst.'.copy';$m->download($dst,$copy);
 if(file_get_contents($copy)!==file_get_contents($src))throw new RuntimeException('local download');
 MnbExcel::setCloudManager($m);
 if(MnbExcel::cloud()->file($dst)->name!==basename($dst))throw new RuntimeException('unified cloud facade');
+$remote=$m->open($dst);$tmp=$remote->localPath();if(!is_file($tmp)||file_get_contents($tmp)!==file_get_contents($src))throw new RuntimeException('remote open');$remote->close();if(is_file($tmp))throw new RuntimeException('temp cleanup');
 @unlink($src);@unlink($dst);@unlink($copy);
 echo "CloudStorageEngineSmokeTest passed\n";

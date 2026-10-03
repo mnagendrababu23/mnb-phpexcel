@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "target_minimum_fixtures": 100,
+  "categories": {
+    "xlsx": [
+      "generated",
+      "excel",
+      "libreoffice",
+      "google-sheets",
+      "encrypted",
+      "macros",
+      "hidden-content",
+      "links",
+      "pivots",
+      "corrupt"
+    ],
+    "xls": [
+      "generated",
+      "excel",
+      "libreoffice",
+      "properties",
+      "hidden-content",
+      "corrupt"
+    ],
+    "csv": [
+      "utf8",
+      "bom",
+      "utf16",
+      "comma",
+      "semicolon",
+      "tab",
+      "pipe",
+      "multiline",
+      "ragged",
+      "formula-like",
+      "corrupt"
+    ]
+  },
+  "external_fixture_note": "Place legally redistributable real-world fixtures under fixtures/external/<producer>/<format>. The runner accepts any fixture directory."
+}

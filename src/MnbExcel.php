@@ -56,6 +56,7 @@ use Mnb\PHPExcel\Domain\DomainImportType;
 use Mnb\PHPExcel\Import\DomainImporter;
 use Mnb\PHPExcel\Import\ImportQualityAnalyzer;
 use Mnb\PHPExcel\Large\ImportMethodAdvisor;
+use Mnb\PHPExcel\Metadata\MetadataFacade;
 use Mnb\PHPExcel\Large\LargeExcelDatabaseImportEngine;
 use Mnb\PHPExcel\Large\LargeImportManifest;
 use Mnb\PHPExcel\Large\LargeExcelPreflightAnalyzer;
@@ -115,6 +116,12 @@ final class MnbExcel
         $session = self::open($source, $options);
         $rows = $session->toArray();
         return WorkbookBuilder::fromArray($rows)->save($target);
+    }
+
+    /** Developer-friendly, lazy metadata API with automatic format routing. */
+    public static function meta(string $path, array $options = []): MetadataFacade
+    {
+        return new MetadataFacade($path, $options);
     }
 
     public static function version(): string

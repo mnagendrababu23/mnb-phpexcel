@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Mnb\PHPExcel;
 
+use Mnb\PHPExcel\Cloud\CloudManager;
 use Mnb\PHPExcel\Application\ImportJobRunner;
 use Mnb\PHPExcel\Application\ImportProfile;
 use Mnb\PHPExcel\Application\ImportProfileManager;
@@ -91,6 +92,20 @@ use Mnb\PHPExcel\Validation\CustomValidatorRegistry;
 
 final class MnbExcel
 {
+    private static ?CloudManager $cloudManager = null;
+
+    /** Unified Google Drive / Google Sheets / OneDrive cloud entry point. */
+    public static function cloud(): CloudManager
+    {
+        return self::$cloudManager ??= new CloudManager();
+    }
+
+    /** Replace the cloud manager, useful for dependency injection/testing. */
+    public static function setCloudManager(CloudManager $manager): void
+    {
+        self::$cloudManager = $manager;
+    }
+
     public const VERSION = '1.7.0';
 
     private static ?ReaderRegistry $readerRegistry = null;
